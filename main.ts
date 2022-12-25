@@ -16,22 +16,16 @@ input.onButtonPressed(Button.AB, function () {
     serial.writeString("s")
     basic.showString("START!")
 })
+radio.onReceivedValue(function (name, value) {
+    if (value == 1) {
+        if (!(input.buttonIsPressed(Button.A) || input.buttonIsPressed(Button.B))) {
+            serial.writeString("j")
+        }
+    }
+})
 serial.redirect(
 SerialPin.USB_TX,
 SerialPin.USB_RX,
 BaudRate.BaudRate115200
 )
-basic.forever(function () {
-    if (input.buttonIsPressed(Button.A)) {
-        if (input.acceleration(Dimension.X) > 1000 || input.acceleration(Dimension.X) < -1000) {
-            basic.showArrow(ArrowNames.West)
-            serial.writeString("a")
-        }
-    }
-    if (input.buttonIsPressed(Button.B)) {
-        if (input.acceleration(Dimension.X) > 1000 || input.acceleration(Dimension.X) < -1000) {
-            basic.showArrow(ArrowNames.East)
-            serial.writeString("b")
-        }
-    }
-})
+radio.setGroup(255)
